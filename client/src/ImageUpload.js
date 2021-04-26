@@ -7,16 +7,27 @@ class ImageUpload extends React.Component {
   onSubmit = (e) => {
     console.log('on submit');
     e.preventDefault();
-  };
 
-  onFileChange = (event) => {
-    this.setState({ file: event.target.files[0] });
+    console.log(this.state.file);
     axios
-      .get('http://localhost:4000')
+      .post('http://localhost:4000', { test: 'this is for test' })
       .then((res) => {
         console.log(res.data);
       })
       .catch((err) => console.log(err));
+
+    axios
+      .get('http://localhost:4000/api/upload')
+      .then((res) => {
+        console.log(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  onFileChange = (event) => {
+    this.setState({ file: event.target.files[0] });
   };
 
   render() {
@@ -24,6 +35,7 @@ class ImageUpload extends React.Component {
     return (
       <div className='ui container'>
         <h1>ImageUpload</h1>
+        <h5>Add An Image</h5>
         <form className='ui form' onSubmit={this.onSubmit}>
           <div className='field'>
             <input onChange={this.onFileChange} type='file' accept='image/*' />

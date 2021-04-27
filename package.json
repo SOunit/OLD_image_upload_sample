@@ -23,6 +23,7 @@
   "dependencies": {
     "aws-sdk": "^2.892.0",
     "cors": "^2.8.5",
+    "fs": "^0.0.1-security",
     "uuid": "^3.3.2"
   }
 }

@@ -3,8 +3,11 @@ const uuid = require('uuid/v1');
 const keys = require('../config/dev');
 
 const s3 = new AWS.S3({
-  accessKeyId: keys.accessKeyId,
-  secretAccessKey: keys.secretAccessKey,
+  credentials: {
+    accessKeyId: keys.accessKeyId,
+    secretAccessKey: keys.secretAccessKey,
+  },
+  region: 'ap-northeast-3',
 });
 
 module.exports = (app) => {
@@ -18,7 +21,7 @@ module.exports = (app) => {
       'putObject',
       {
         Bucket: 'image-upload-sample-bucket',
-        ContentType: 'jpeg',
+        ContentType: 'image/jpeg',
         Key: key,
       },
       (err, url) => {

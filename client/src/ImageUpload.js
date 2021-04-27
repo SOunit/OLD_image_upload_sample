@@ -4,22 +4,34 @@ import axios from 'axios';
 class ImageUpload extends React.Component {
   state = { file: null };
 
-  onSubmit = (e) => {
+  onSubmit = async (e) => {
     console.log('on submit');
     e.preventDefault();
 
     console.log(this.state.file);
-    axios
-      .post('http://localhost:4000', { test: 'this is for test' })
-      .then((res) => {
-        console.log(res.data);
-      })
-      .catch((err) => console.log(err));
 
-    axios
+    // get url from aws s3
+    const uploadConfig = await axios
       .get('http://localhost:4000/api/upload')
-      .then((res) => {
-        console.log(res.data);
+      .catch((err) => {
+        console.log(err);
+      });
+
+    // upload image to s3 strage
+    const upload = await axios
+      .put(uploadConfig.data.url, this.state.file, {
+        headers: {
+          'Content-type': this.state.file.type,
+        },
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+
+    // save image in node server
+    const res = await axios
+      .post('http://localhost:4000/', {
+        imageUrl: uploadConfig.data.key,
       })
       .catch((err) => {
         console.log(err);

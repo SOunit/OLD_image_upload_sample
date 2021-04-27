@@ -6,6 +6,17 @@ const app = express();
 app.use(bodyParser.json());
 app.use(cors());
 
+app.get('/', (req, res) => {
+  fs.readFile('./data/output.json', (err, fileContent) => {
+    if (err) {
+      console.log(err);
+      res.send([]);
+    } else {
+      res.send(JSON.parse(fileContent));
+    }
+  });
+});
+
 // create json
 app.post('/', (req, res) => {
   // init images
@@ -24,9 +35,10 @@ app.post('/', (req, res) => {
 
     // save images url to json
     fs.writeFileSync('./data/output.json', JSON.stringify(images));
-  });
 
-  res.send(images);
+    console.log(images);
+    res.send(images);
+  });
 });
 
 require('./routes/uploadRoutes')(app);
